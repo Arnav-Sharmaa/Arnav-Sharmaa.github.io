@@ -33,19 +33,47 @@ btnTheme.addEventListener('click', toggleTheme)
 
 const displayList = () => {
 	const navUl = document.querySelector('.nav__list')
+	const mainContent = document.querySelector('main')
+	const aboutSection = document.querySelector('.about')
 
 	if (btnHamburger.classList.contains('fa-bars')) {
 		btnHamburger.classList.remove('fa-bars')
 		btnHamburger.classList.add('fa-times')
 		navUl.classList.add('display-nav-list')
+		// Add blur effect to main content
+		mainContent.classList.add('nav-blur')
+		aboutSection.classList.add('nav-blur')
 	} else {
 		btnHamburger.classList.remove('fa-times')
 		btnHamburger.classList.add('fa-bars')
 		navUl.classList.remove('display-nav-list')
+		// Remove blur effect from main content
+		mainContent.classList.remove('nav-blur')
+		aboutSection.classList.remove('nav-blur')
 	}
 }
 
 btnHamburger.addEventListener('click', displayList)
+
+// Function to close navigation menu
+const closeNavMenu = () => {
+	const navUl = document.querySelector('.nav__list')
+	const mainContent = document.querySelector('main')
+	const aboutSection = document.querySelector('.about')
+
+	btnHamburger.classList.remove('fa-times')
+	btnHamburger.classList.add('fa-bars')
+	navUl.classList.remove('display-nav-list')
+	// Remove blur effect from main content
+	mainContent.classList.remove('nav-blur')
+	aboutSection.classList.remove('nav-blur')
+}
+
+// Add event listeners to all navigation links
+const navLinks = document.querySelectorAll('.nav__list .link--nav')
+navLinks.forEach(link => {
+	link.addEventListener('click', closeNavMenu)
+})
 
 const scrollUp = () => {
 	const btnScrollTop = document.querySelector('.scroll-top')
@@ -54,7 +82,7 @@ const scrollUp = () => {
 		body.scrollTop > 500 ||
 		document.documentElement.scrollTop > 500
 	) {
-		btnScrollTop.style.display = 'block'
+		btnScrollTop.style.display = 'flex'
 	} else {
 		btnScrollTop.style.display = 'none'
 	}
