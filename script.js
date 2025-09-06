@@ -1,35 +1,52 @@
 const body = document.body
 
-const btnTheme = document.querySelector('.fa-moon')
-const btnHamburger = document.querySelector('.fa-bars')
+const btnTheme = document.querySelector('#btn-theme')
+const btnThemeButton = document.querySelector('.btn--icon[aria-label="toggle theme"]')
+const btnHamburger = document.querySelector('.nav__hamburger i')
 
 const addThemeClass = (bodyClass, btnClass) => {
   body.classList.add(bodyClass)
   btnTheme.classList.add(btnClass)
 }
 
-const getBodyTheme = localStorage.getItem('portfolio-theme')
-const getBtnTheme = localStorage.getItem('portfolio-btn-theme')
+const getBodyTheme = localStorage.getItem('portfolio-theme') || 'light'
+const getBtnTheme = localStorage.getItem('portfolio-btn-theme') || 'fa-moon'
+
+// Clear any existing theme classes first
+body.classList.remove('light', 'dark')
+btnTheme.classList.remove('fa-moon', 'fa-sun')
 
 addThemeClass(getBodyTheme, getBtnTheme)
 
 const isDark = () => body.classList.contains('dark')
 
 const setTheme = (bodyClass, btnClass) => {
+	// Remove existing theme classes
+	body.classList.remove('light', 'dark')
+	btnTheme.classList.remove('fa-moon', 'fa-sun')
 
-	body.classList.remove(localStorage.getItem('portfolio-theme'))
-	btnTheme.classList.remove(localStorage.getItem('portfolio-btn-theme'))
+	// Add new theme classes
+	addThemeClass(bodyClass, btnClass)
 
-  addThemeClass(bodyClass, btnClass)
-
+	// Store in localStorage
 	localStorage.setItem('portfolio-theme', bodyClass)
 	localStorage.setItem('portfolio-btn-theme', btnClass)
 }
 
-const toggleTheme = () =>
-	isDark() ? setTheme('light', 'fa-moon') : setTheme('dark', 'fa-sun')
+const toggleTheme = () => {
+	if (isDark()) {
+		setTheme('light', 'fa-moon')
+	} else {
+		setTheme('dark', 'fa-sun')
+	}
+}
 
-btnTheme.addEventListener('click', toggleTheme)
+// Make sure the event listener is properly attached to the button, not just the icon
+if (btnThemeButton && btnTheme) {
+	btnThemeButton.addEventListener('click', toggleTheme)
+} else {
+	console.error('Theme button not found!')
+}
 
 const displayList = () => {
 	const navUl = document.querySelector('.nav__list')
@@ -53,7 +70,12 @@ const displayList = () => {
 	}
 }
 
-btnHamburger.addEventListener('click', displayList)
+// Make sure the hamburger button event listener is properly attached
+if (btnHamburger) {
+	btnHamburger.parentElement.addEventListener('click', displayList)
+} else {
+	console.error('Hamburger button not found!')
+}
 
 // Function to close navigation menu
 const closeNavMenu = () => {
